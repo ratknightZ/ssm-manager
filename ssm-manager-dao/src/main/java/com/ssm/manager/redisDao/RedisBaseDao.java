@@ -1,8 +1,8 @@
 package com.ssm.manager.redisDao;
 
-public interface RedisBaseDao {
+public interface RedisBaseDao<K,V> {
 
-    Object get(String key);
+    V get(K key);
 
-    public boolean set(String key, Object value, long tiem);
+    boolean set(K key, V value, long tiem);
 }

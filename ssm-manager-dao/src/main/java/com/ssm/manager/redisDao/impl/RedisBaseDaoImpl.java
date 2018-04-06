@@ -6,16 +6,16 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RedisBaseDaoImpl implements RedisBaseDao {
+public class RedisBaseDaoImpl<K,V> implements RedisBaseDao<K,V> {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<K,V> redisTemplate;
 
-    public Object get(String key) {
+    public V get(K key) {
         return redisTemplate.opsForValue().get(key);
     }
 
-    public boolean set(String key, Object value, long time) {
+    public boolean set(K key, V value, long time) {
         try {
             if (time > 0) {
                 redisTemplate.opsForValue().set(key, value, time);

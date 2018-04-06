@@ -14,10 +14,10 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Autowired
-    private RedisBaseDao redisBaseDao;
+    private RedisBaseDao<String,User> redisBaseDao;
 
     public User get(int id) {
-        User user = (User) redisBaseDao.get(id + "");
+        User user = redisBaseDao.get(id + "");
         if (user == null){
             user = userDao.select(id);
         }
