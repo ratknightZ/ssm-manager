@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssm.manager.dao.PermissionDao">
+    <resultMap id="PermissionBase" type="com.ssm.manager.pojo.Permission">
+        <id column="PERMISSION_ID" property="permissionId"/>
+        <result column="PERMISSION_NAME" property="permissionName"/>
+        <result column="DESCRIPTION" property="description"/>
+        <result column="GMT_CREATE" property="gmtCreate"/>
+        <result column="GMT_UPDATE" property="gmtUpdate"/>
+    </resultMap>
+
+    <select id="select" parameterType="int" resultMap="PermissionBase">
+        SELECT * FROM auth_permission WHERE PERMISSION_ID=#{permissionId}
+    </select>
+
+    <select id="selectPermissionByRoleId" parameterType="int" resultMap="PermissionBase">
+        SELECT auth_permission.*
+        FROM auth_role_permission_r
+        INNER JOIN auth_permission ON auth_permission.PERMISSION_ID=auth_role_permission_r.PERMISSION_ID
+        WHERE auth_role_permission_r.ROLE_ID=#{userId}
+    </select>
+
+    <select id="selectPermissionByUserId" parameterType="long" resultMap="PermissionBase">
+        SELECT auth_permission.*
+        FROM
+        (SELECT PERMISSION_ID
+        FROM auth_user_role_r
+        INNER JOIN auth_role_permission_r ON auth_role_permission_r.ROLE_ID=auth_user_role_r.ROLE_ID
+        WHERE auth_user_role_r.USER_ID=#{userId}) a
+        INNER JOIN auth_permission ON auth_permission.PERMISSION_ID=a.PERMISSION_ID
+        GROUP BY PERMISSION_ID
+    </select>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssm.manager.dao.RoleDao">
+    <resultMap id="RoleBase" type="com.ssm.manager.pojo.Role">
+        <id column="ROLE_ID" property="roleId"/>
+        <result column="ROLE_NAME" property="roleName"/>
+        <result column="DESCRIPTION" property="description"/>
+        <result column="GMT_CREATE" property="gmtCreate"/>
+        <result column="GMT_UPDATE" property="gmtUpdate"/>
+    </resultMap>
+
+    <select id="select" parameterType="int" resultMap="RoleBase">
+        SELECT * FROM auth_role WHERE ROLE_ID=#{roleId}
+    </select>
+
+    <select id="selectRoleByUserId" parameterType="long" resultMap="RoleBase">
+        SELECT auth_role.*
+        FROM auth_user_role_r
+        INNER JOIN auth_role ON auth_role.ROLE_ID=auth_user_role_r.ROLE_ID
+        WHERE auth_user_role_r.USER_ID=#{userId}
+    </select>
+</mapper>
