@@ -1,9 +1,11 @@
 package com.ssm.manager.controller;
 
 import com.ssm.manager.exception.UserException;
+import com.ssm.manager.pojo.UserLogin;
 import com.ssm.manager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,10 +36,17 @@ public class UserLoginController {
                         @RequestParam String password){
 
         try {
-            userService.login(userName,password);
+            UserLogin userLogin = userService.login(userName,password);
         } catch (UserException e) {
             e.printStackTrace();
         }
-        return "";
+        return userName;
+    }
+
+    @ResponseBody
+    @GetMapping("/loginout")
+    public String loginout(){
+        userService.loginout();
+        return "true";
     }
 }

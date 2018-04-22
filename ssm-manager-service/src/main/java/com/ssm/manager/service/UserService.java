@@ -13,6 +13,8 @@ public interface UserService {
 
     UserLogin login(String userName, String password) throws UserException;
 
+    void loginout();
+
     UserLogin getLoginInfo(long userId);
 
     UserLogin getLoginInfo(String userName);

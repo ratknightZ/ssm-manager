@@ -3,6 +3,7 @@ package com.ssm.manager.service.impl;
 import com.ssm.manager.dao.PermissionDao;
 import com.ssm.manager.dao.RoleDao;
 import com.ssm.manager.dao.UserLoginDao;
+import com.ssm.manager.enums.RoleEnum;
 import com.ssm.manager.exception.UserException;
 import com.ssm.manager.pojo.Permission;
 import com.ssm.manager.pojo.Role;
@@ -46,6 +47,7 @@ public class UserServiceImpl implements UserService {
         userLogin.setUserName(userName);
         userLogin.setUserPassword(userPassword);
         userLoginDao.insert(userLogin);
+        roleDao.insertUserRoleR(userLogin.getUserId(), RoleEnum.USER.getValue());
     }
 
     public UserLogin login(String userName, String password) throws UserException {
@@ -60,7 +62,12 @@ public class UserServiceImpl implements UserService {
         token.setRememberMe(true);
         Subject currentUser = SecurityUtils.getSubject();
         currentUser.login(token);
-        return null;
+        return userLogin;
+    }
+
+    public void loginout() {
+        Subject currentUser = SecurityUtils.getSubject();
+        currentUser.logout();
     }
 
     public UserLogin getLoginInfo(long userId) {

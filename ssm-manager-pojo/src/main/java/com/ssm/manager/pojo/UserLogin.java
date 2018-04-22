@@ -1,8 +1,9 @@
 package com.ssm.manager.pojo;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class UserLogin {
+public class UserLogin implements Serializable{
 
     long userId;
 

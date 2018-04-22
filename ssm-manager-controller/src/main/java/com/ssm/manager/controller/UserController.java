@@ -27,6 +27,6 @@ public class UserController {
         Subject currentUser = SecurityUtils.getSubject();
         String userName = (String) currentUser.getPrincipal();
         UserLogin userLogin = userService.getLoginInfo(userName);
-        return "";
+        return userLogin.getUserName();
     }
 }

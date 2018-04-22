@@ -1,8 +1,9 @@
 package com.ssm.manager.pojo;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Permission {
+public class Permission implements Serializable{
 
     int permissionId;
 

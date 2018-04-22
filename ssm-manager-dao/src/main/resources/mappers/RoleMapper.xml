@@ -19,4 +19,9 @@
         INNER JOIN auth_role ON auth_role.ROLE_ID=auth_user_role_r.ROLE_ID
         WHERE auth_user_role_r.USER_ID=#{userId}
     </select>
+
+    <insert id="insertUserRoleR">
+        INSERT INTO auth_user_role_r(USER_ID,ROLE_ID)
+        VALUES(#{userId},#{roleId})
+    </insert>
 </mapper>

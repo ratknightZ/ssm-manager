@@ -1,8 +1,9 @@
 package com.ssm.manager.pojo;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Role {
+public class Role implements Serializable {
 
     int roleId;
 

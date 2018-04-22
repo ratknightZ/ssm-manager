@@ -11,4 +11,5 @@
     <import resource="applicationContext-dao.xml"/>
     <import resource="applicationContext-trans.xml"/>
     <import resource="applicationContext-shiro.xml"/>
+    <import resource="applicationContext-ehcache.xml"/>
 </beans>

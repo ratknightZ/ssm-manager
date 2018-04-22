@@ -4,11 +4,35 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- 自定义Realm -->
-    <bean id="myRealm" class="com.ssm.manager.shiro.MyRealm"/>
+    <bean id="myRealm" class="com.ssm.manager.shiro.MyRealm">
+        <!-- 对认证数据、授权数据 哪些进行缓存
+        缓存区的名字就是ehcache.xml 自定义cache的name -->
+        <property name="authorizationCacheName" value="bos"></property>
+    </bean>
+
+    <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="sid"/>
+        <property name="httpOnly" value="true"/>
+        <property name="maxAge" value="-1"/> <!-- 浏览器关闭时失效此Cookie -->
+    </bean>
+    <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="rememberMe"/>
+        <property name="httpOnly" value="true"/>
+        <property name="maxAge" value="172800"/><!-- 两天 -->
+    </bean>
+    <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+        <property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}"/>
+        <property name="cookie" ref="rememberMeCookie"/>
+    </bean>
 
     <!-- 安全管理器 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="myRealm"></property>
+        <!-- 将shiro的缓存管理器，注入到安全管理器中
+        要想在Realm中将查询的数据放置到缓存中，
+        需要在Realm之前创建动态代理对象，通过缓存代理控制Realm -->
+        <property name="cacheManager" ref="shiroCacheManager"></property>
+        <property name="rememberMeManager" ref="rememberMeManager"></property>
     </bean>
 
     <!-- 启用shrio授权注解拦截方式 -->

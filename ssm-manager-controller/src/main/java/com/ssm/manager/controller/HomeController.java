@@ -11,7 +11,7 @@ public class HomeController {
 
     private Logger logger = LoggerFactory.getLogger(HomeController.class);
 
-    @GetMapping(value = "/u")
+    @GetMapping(value = "/")
     public ModelAndView index(){
         ModelAndView mv = new ModelAndView("template/index");
         mv.addObject("a","hello beetl!");
