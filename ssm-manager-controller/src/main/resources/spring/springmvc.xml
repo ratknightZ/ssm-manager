@@ -84,10 +84,25 @@
 
     <!-- 拦截器 -->
     <mvc:annotation-driven>
-        <mvc:message-converters register-defaults="true">
+        <!--设置不使用默认的消息转换器-->
+        <mvc:message-converters register-defaults="false">
             <!-- 编码转换 -->
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">
                 <constructor-arg value="UTF-8" />
+            </bean>
+            <bean class="org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter" />
+            <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+            <bean class="org.springframework.http.converter.BufferedImageHttpMessageConverter" />
+            <!--配置fastjson中实现HttpMessageConverter接口的转换器-->
+            <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter" >
+                <!--加入支持的媒体类型，返回contentType-->
+                <property name="supportedMediaTypes">
+                    <list>
+                        <!--这里顺序不能反，一定要先写text/html，不然IE下会出现下载提示-->
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
