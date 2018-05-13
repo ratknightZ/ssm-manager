@@ -7,7 +7,7 @@
     <bean id="myRealm" class="com.ssm.manager.shiro.MyRealm">
         <!-- 对认证数据、授权数据 哪些进行缓存
         缓存区的名字就是ehcache.xml 自定义cache的name -->
-        <property name="authorizationCacheName" value="bos"></property>
+        <property name="authorizationCacheName" value="userLogin"></property>
     </bean>
 
     <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">

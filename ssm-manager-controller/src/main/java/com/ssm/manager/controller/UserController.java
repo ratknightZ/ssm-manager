@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,6 +24,24 @@ public class UserController {
     public AppResultVO getLoginUser(){
         Subject currentUser = SecurityUtils.getSubject();
         String userName = (String) currentUser.getPrincipal();
+        UserLogin userLogin = userService.getLoginInfo(userName);
+        AppResultVO resultVO = new AppResultVO();
+        resultVO.setIsSuccess(1);
+        resultVO.setData(userLogin);
+        return resultVO;
+    }
+
+    @GetMapping("/user/get_user")
+    public AppResultVO getUser(@RequestParam long userId){
+        UserLogin userLogin = userService.getLoginInfo(userId);
+        AppResultVO resultVO = new AppResultVO();
+        resultVO.setData(userLogin);
+        resultVO.setIsSuccess(1);
+        return resultVO;
+    }
+
+    @GetMapping("/user/get_user_by_name")
+    public AppResultVO getUserByName(@RequestParam String userName){
         UserLogin userLogin = userService.getLoginInfo(userName);
         AppResultVO resultVO = new AppResultVO();
         resultVO.setIsSuccess(1);

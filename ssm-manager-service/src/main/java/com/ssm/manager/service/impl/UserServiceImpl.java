@@ -17,6 +17,8 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -40,7 +42,8 @@ public class UserServiceImpl implements UserService {
 
     private RandomNumberGenerator randomNumberGenerator = new SecureRandomNumberGenerator();
 
-    public void addUserLogin(String userName, String password) {
+    @CachePut(value = "userLogin",key = "#result.userId")
+    public UserLogin addUserLogin(String userName, String password) {
         UserLogin userLogin = new UserLogin();
         userLogin.setSalt(randomNumberGenerator.nextBytes().toHex());
         String userPassword = new SimpleHash(algorithmName,password, ByteSource.Util.bytes(userLogin.getSalt()),hashIterations).toHex();
@@ -48,8 +51,10 @@ public class UserServiceImpl implements UserService {
         userLogin.setUserPassword(userPassword);
         userLoginDao.insert(userLogin);
         roleDao.insertUserRoleR(userLogin.getUserId(), RoleEnum.USER.getValue());
+        return userLogin;
     }
 
+    @CachePut(value = "userLogin",key = "#result.userId")
     public UserLogin login(String userName, String password) throws UserException {
         UserLogin userLogin = userLoginDao.selectByUserName(userName);
         if (userLogin == null){
@@ -70,6 +75,7 @@ public class UserServiceImpl implements UserService {
         currentUser.logout();
     }
 
+    @Cacheable(value = "userLogin",key = "#userId")
     public UserLogin getLoginInfo(long userId) {
         return userLoginDao.select(userId);
     }
